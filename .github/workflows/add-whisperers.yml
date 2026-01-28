@@ -1,21 +1,25 @@
-# ABOUTME: Workflow that triggers when new repos are created in the org.
-# ABOUTME: Adds the whisperers team with read access to every new repository.
+# ABOUTME: Scheduled workflow that ensures whisperers team has read access to all repos.
+# ABOUTME: Runs hourly and on-demand to add the team to any repos missing it.
 
-name: Add Whisperers to New Repos
+name: Add Whisperers to All Repos
 
 on:
-  repository:
-    types: [created]
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
 
 jobs:
   add-whisperers:
     runs-on: ubuntu-latest
     steps:
-      - name: Add whisperers team with read access
+      - name: Add whisperers team to all repos
         env:
           GH_TOKEN: ${{ secrets.ORG_ADMIN_TOKEN }}
         run: |
-          gh api \
-            --method PUT \
-            "/orgs/alltuner/teams/whisperers/repos/alltuner/${{ github.event.repository.name }}" \
-            -f permission=pull
+          gh repo list alltuner --limit 1000 --json name --jq '.[].name' | while read -r repo; do
+            echo "Adding whisperers to $repo"
+            gh api \
+              --method PUT \
+              "/orgs/alltuner/teams/whisperers/repos/alltuner/$repo" \
+              -f permission=pull || echo "Failed for $repo, continuing..."
+          done
