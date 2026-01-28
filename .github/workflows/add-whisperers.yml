@@ -1,0 +1,21 @@
+# ABOUTME: Workflow that triggers when new repos are created in the org.
+# ABOUTME: Adds the whisperers team with read access to every new repository.
+
+name: Add Whisperers to New Repos
+
+on:
+  repository:
+    types: [created]
+
+jobs:
+  add-whisperers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add whisperers team with read access
+        env:
+          GH_TOKEN: ${{ secrets.ORG_ADMIN_TOKEN }}
+        run: |
+          gh api \
+            --method PUT \
+            "/orgs/alltuner/teams/whisperers/repos/alltuner/${{ github.event.repository.name }}" \
+            -f permission=pull
