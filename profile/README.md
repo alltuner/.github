@@ -1,6 +1,6 @@
 # All Tuner Labs
 
-AI-powered media & creative technology.  
+Smoothing rough edges through lean technology and craft.  
 [alltuner.com](https://alltuner.com)
 
 ## Open source projects
