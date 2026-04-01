@@ -1,7 +1,6 @@
 # All Tuner Labs
 
-Smoothing rough edges through lean technology and craft.  
-[alltuner.com](https://alltuner.com)
+Smoothing rough edges through lean technology and craft. [alltuner.com](https://alltuner.com)
 
 ## Open source projects
 
